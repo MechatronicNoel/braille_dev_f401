@@ -71,7 +71,7 @@ enum
   */
 
 /* USER CODE BEGIN PRIVATE_TYPES */
-
+uint8_t usb_buffer[0x40];
 /* USER CODE END PRIVATE_TYPES */
 
 /**
@@ -113,7 +113,43 @@ enum
 __ALIGN_BEGIN static uint8_t CUSTOM_HID_ReportDesc_FS[USBD_CUSTOM_HID_REPORT_DESC_SIZE] __ALIGN_END =
 {
   /* USER CODE BEGIN 0 */
-  0xA1, 0x01,
+   0x06, 0x8c, 0xff, // Usage Page (Vendor Defined Page 8c)
+   0x09, 0x01,       // Usage (Vendor Usage 1)
+   0xa1, 0x01,       // Collection (Application)
+
+   // Input report
+   0x85, 0x01,       // Report ID (1)
+   0x09, 0x20,       // Usage (Data in)
+   0x15, 0x00,       // Logical Minimum (0)
+   0x26, 0xff, 0x00, // Logical Maximum (255)
+   0x75, 0x08,       // Report Size (8 bits)
+   0x95, 0x01,       // Report Count (1 byte)
+   0x81, 0x02,       // Input (Data, Var, Abs)
+
+   // Output report
+   0x85, 0x02,       // Report ID (2)
+   0x09, 0x21,       // Usage (Data out)
+   0x15, 0x00,       // Logical Minimum (0)
+   0x26, 0xff, 0x00, // Logical Maximum (255)
+   0x75, 0x08,       // Report Size (8 bits)
+   0x95, 0x01,       // Report Count (1 byte)
+   0x91, 0x02,       // Output (Data, Var, Abs)
+
+//	    0x06, 0x00, 0xff,               //Usage Page(Undefined )
+//	    0x09, 0x01,                    // USAGE (Undefined)
+//	    0xa1, 0x01,                    // COLLECTION (Application)
+//	    0x15, 0x00,                    //   LOGICAL_MINIMUM (0)
+//	    0x26, 0xff, 0x00,              //   LOGICAL_MAXIMUM (255)
+//	    0x75, 0x08,                    //   REPORT_SIZE (8)
+//	    0x95, 0x40,                    //   REPORT_COUNT (64)
+//	    0x09, 0x01,                    //   USAGE (Undefined)
+//	    0x81, 0x02,                    //   INPUT (Data,Var,Abs)
+//	    0x95, 0x40,                    //   REPORT_COUNT (64)
+//	    0x09, 0x01,                    //   USAGE (Undefined)
+//	    0x91, 0x02,                    //   OUTPUT (Data,Var,Abs)
+//	    0x95, 0x01,                    //   REPORT_COUNT (1)
+//	    0x09, 0x01,                    //   USAGE (Undefined)
+//	    0xb1, 0x02,                    //   FEATURE (Data,Var,Abs)
   /* USER CODE END 0 */
   0xC0    /*     END_COLLECTION	             */
 };
@@ -198,9 +234,10 @@ static int8_t CUSTOM_HID_DeInit_FS(void)
 static int8_t CUSTOM_HID_OutEvent_FS(uint8_t event_idx, uint8_t state)
 {
   /* USER CODE BEGIN 6 */
-  UNUSED(event_idx);
-  UNUSED(state);
 
+  uint8_t received_data[2];
+  USBD_CUSTOM_HID_HandleTypeDef *hhid = (USBD_CUSTOM_HID_HandleTypeDef*) hUsbDeviceFS.pClassData;
+  memcpy(received_data, hhid->Report_buf, 2);
   /* Start next USB packet transfer once data processing is completed */
   if (USBD_CUSTOM_HID_ReceivePacket(&hUsbDeviceFS) != (uint8_t)USBD_OK)
   {
