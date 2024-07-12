@@ -23,7 +23,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "usbd_customhid.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -43,7 +43,18 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+extern USBD_HandleTypeDef hUsbDeviceFS;
+uint8_t mouse_buffer[4];
 
+		  struct gameHID_t {
+		      int8_t JoyX; 		// 1 byte, 8 bits are the buttons : 0 or 1
+		      int8_t JoyY; 		// 1 byte, 8 bits are the buttons : 0 or 1
+		      uint8_t JoyB1; 	// Button, bit 0
+		  };
+		  struct gameHID_t gameHID;
+
+
+		  int8_t counter1=0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -87,7 +98,10 @@ int main(void)
   MX_GPIO_Init();
   MX_USB_DEVICE_Init();
   /* USER CODE BEGIN 2 */
-
+  mouse_buffer[0] = 0;
+  mouse_buffer[1] = 0;
+  mouse_buffer[2] = 0;
+  mouse_buffer[3] = 0;
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -97,8 +111,28 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  int c;
-	  c = 32;
+    // mouse_buffer[0] = 0; // Right and left clicks (0: None, 1: Left click, 2: Right click)
+    // mouse_buffer[1] = -10; // X Movement (0: not moving, +ve: Right movement, -ve: Left Movement)
+    // mouse_buffer[2] = 0; // Y Movement (0: not moving, +ve: Right movement, -ve: Left Movement)
+    // mouse_buffer[3] = 0; // Scroll (0: No scroll, +ve: up Scroll, -ve: Down Sroll)
+
+    // USBD_CUSTOM_HID_SendReport(&hUsbDeviceFS,mouse_buffer,3);
+    // HAL_Delay(1000);
+
+//    keyboardhid.KEYCODE1 = 0x04;
+//    USBD_HID_SendReport(&hUsbDeviceFS,&keyboardhid,sizeof(keyboardhid));
+//    HAL_Delay(50);
+//    keyboardhid.KEYCODE1 = 0x00;
+//    USBD_HID_SendReport(&hUsbDeviceFS,&keyboardhid,sizeof(keyboardhid));
+//    HAL_Delay(1000);
+
+//	  	    counter1=(counter1+1)%32-127;
+//	  	    gameHID.JoyX = counter1*2;
+//	  	    gameHID.JoyY = counter1*4;
+//	  	    gameHID.JoyB1 = ~gameHID.JoyB1;
+//	  	    USBD_CUSTOM_HID_SendReport(&hUsbDeviceFS, (uint8_t*) &gameHID, sizeof(struct gameHID_t));
+//  	    HAL_Delay(100);
+
   }
   /* USER CODE END 3 */
 }

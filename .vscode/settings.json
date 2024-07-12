@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "usbd_custom_hid_if.h": "c",
+        "usbd_core.h": "c"
+    }
+}
