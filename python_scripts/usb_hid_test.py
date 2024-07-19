@@ -16,11 +16,12 @@ device.set_raw_data_handler(sample_handler)
 print(target_usage)
 
 report = device.find_output_reports()
-
+report_2 = device.find_input_reports()
 print(report)
+print(report_2)
 print(report[0])
 
-buffer = [0x8]*2
+buffer = [0x8]*21
 buffer[0] = 0
 buffer[1] = 89
 
