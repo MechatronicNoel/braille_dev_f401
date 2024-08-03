@@ -19,6 +19,13 @@ typedef enum{
     BRAILLE_NOT_OK,
 }braille_dev_err_t;
 
+/**
+ * @brief 
+ * 
+ * @return braille_dev_err_t 
+ */
 braille_dev_err_t braille_dev_init(void);
+
+
 void braille_dev_task(void);
 #endif /* INC_BRAILLE_DRIVER_H_ */

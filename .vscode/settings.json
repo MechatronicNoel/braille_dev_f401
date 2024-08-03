@@ -4,6 +4,8 @@
         "usbd_core.h": "c",
         "usbd_customhid.h": "c",
         "braille_driver.h": "c",
-        "braille_driver_config.h": "c"
+        "braille_driver_config.h": "c",
+        "freertos.h": "c",
+        "timers.h": "c"
     }
 }
