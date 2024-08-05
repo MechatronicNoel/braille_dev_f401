@@ -15,7 +15,7 @@
 
 /* Reflash the micro and changue the macro when the micro connect to NVDA
    Temporary workaround */
-#define config_NVDA_FIRST_CONNECTION	0U /* Only valid in dev mode 
+#define config_NVDA_FIRST_CONNECTION	1U /* Only valid in dev mode
                                             0 = Connection established with NVDA 
                                             1 = No Connection established with NVDA*/
 #endif /* INC_BRAILLE_DRIVER_CONFIG_H_ */

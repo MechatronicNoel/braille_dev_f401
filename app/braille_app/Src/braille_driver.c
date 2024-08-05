@@ -16,6 +16,7 @@
 #include "braille_driver_config.h"
 #include "FreeRTOS.h"
 #include "timers.h"
+#include "cd74hc406x.h"
 
 #define UART_HANDLER huart1
 #define UART_INSTANCE USART1
@@ -23,6 +24,11 @@
 
 const uint8_t describe_tag[] = { 0xFF,0xFF,0x0A }; /* Sent to identify the display and receive amount of cells this unit has */
 const uint8_t display_tag[] = { 0xFF,0xFF,0x04,0x00,0x99,0x00,0x50,0x00 }; /* Sent to request displaying of cells */
+
+uint32_t test_state;
+uint8_t test_channel = 0;
+
+uint32_t test_channels_buff[16];
 
 typedef enum 
 {
@@ -126,6 +132,16 @@ braille_dev_err_t braille_dev_init(void){
 
     memset(braille_dev.data_in,'0',3);
 
+    while(1){
+       static uint8_t ch = 0;
+       test_state = cd74hc406x_read_channel(test_channel);
+       ch++;
+       HAL_Delay(200);
+
+//    	cd74hc406x_read_all_channels(test_channels_buff);
+//    	HAL_Delay(200);
+
+    }
 #if config_NVDA_FIRST_CONNECTION
     braille_dev.state = NVDA_NOT_CONNECTED;
 #else

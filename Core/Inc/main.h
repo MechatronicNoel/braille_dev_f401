@@ -59,6 +59,18 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define LED_Pin GPIO_PIN_13
 #define LED_GPIO_Port GPIOC
+#define CD74HCT4067_EN_Pin GPIO_PIN_3
+#define CD74HCT4067_EN_GPIO_Port GPIOB
+#define CD74HCT4067_S0_Pin GPIO_PIN_4
+#define CD74HCT4067_S0_GPIO_Port GPIOB
+#define CD74HCT4067_S1_Pin GPIO_PIN_5
+#define CD74HCT4067_S1_GPIO_Port GPIOB
+#define CD74HCT4067_S2_Pin GPIO_PIN_6
+#define CD74HCT4067_S2_GPIO_Port GPIOB
+#define CD74HCT4067_S3_Pin GPIO_PIN_7
+#define CD74HCT4067_S3_GPIO_Port GPIOB
+#define CD74HCT4067_S_Pin GPIO_PIN_8
+#define CD74HCT4067_S_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
