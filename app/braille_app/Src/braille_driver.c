@@ -133,13 +133,13 @@ braille_dev_err_t braille_dev_init(void){
     memset(braille_dev.data_in,'0',3);
 
     while(1){
-       static uint8_t ch = 0;
-       test_state = cd74hc406x_read_channel(test_channel);
-       ch++;
-       HAL_Delay(200);
+//       static uint8_t ch = 0;
+//       test_state = cd74hc406x_read_channel(test_channel);
+//       ch++;
+//       HAL_Delay(200);
 
-//    	cd74hc406x_read_all_channels(test_channels_buff);
-//    	HAL_Delay(200);
+    	cd74hc406x_read_all_channels(test_channels_buff);
+    	HAL_Delay(100);
 
     }
 #if config_NVDA_FIRST_CONNECTION

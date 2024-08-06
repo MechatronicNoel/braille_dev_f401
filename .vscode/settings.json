@@ -6,6 +6,7 @@
         "braille_driver.h": "c",
         "braille_driver_config.h": "c",
         "freertos.h": "c",
-        "timers.h": "c"
+        "timers.h": "c",
+        "cd74hc406x.h": "c"
     }
 }

@@ -10,7 +10,11 @@
 
 #include "main.h"
 
-uint32_t cd74hc406x_read_channel(uint8_t channel);
+/**
+ * @brief 
+ * 
+ * @param channels 
+ */
 void cd74hc406x_read_all_channels(uint32_t *channels);
 
 #endif /* DRIVERS_CD74HC406X_INC_CD74HC406X_H_ */
