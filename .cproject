@@ -57,6 +57,7 @@
 									<listOptionValue builtIn="false" value="../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/braille_dev_f401/app/drivers/cd74hc406x/Inc}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/braille_dev_f401/app/braille_app/Inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/braille_dev_f401/app/drivers/74hc595/Inc}&quot;"/>
 								</option>
 								<inputType id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c.717703208" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c"/>
 							</tool>

@@ -17,6 +17,7 @@
 #include "FreeRTOS.h"
 #include "timers.h"
 #include "cd74hc406x.h"
+#include "74hc595.h"
 
 #define UART_HANDLER huart1
 #define UART_INSTANCE USART1
@@ -132,16 +133,6 @@ braille_dev_err_t braille_dev_init(void){
 
     memset(braille_dev.data_in,'0',3);
 
-    while(1){
-//       static uint8_t ch = 0;
-//       test_state = cd74hc406x_read_channel(test_channel);
-//       ch++;
-//       HAL_Delay(200);
-
-    	cd74hc406x_read_all_channels(test_channels_buff);
-    	HAL_Delay(100);
-
-    }
 #if config_NVDA_FIRST_CONNECTION
     braille_dev.state = NVDA_NOT_CONNECTED;
 #else
@@ -186,7 +177,6 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 
 	    braille_uart_handler();
 	}
-
 
 }
 
