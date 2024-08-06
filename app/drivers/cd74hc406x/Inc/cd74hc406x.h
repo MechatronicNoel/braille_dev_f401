@@ -15,6 +15,6 @@
  * 
  * @param channels 
  */
-void cd74hc406x_read_all_channels(uint32_t *channels);
+void cd74hc406x_read_all_channels(uint8_t *channels);
 
 #endif /* DRIVERS_CD74HC406X_INC_CD74HC406X_H_ */

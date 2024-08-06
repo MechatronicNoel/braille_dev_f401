@@ -26,11 +26,6 @@
 const uint8_t describe_tag[] = { 0xFF,0xFF,0x0A }; /* Sent to identify the display and receive amount of cells this unit has */
 const uint8_t display_tag[] = { 0xFF,0xFF,0x04,0x00,0x99,0x00,0x50,0x00 }; /* Sent to request displaying of cells */
 
-uint32_t test_state;
-uint8_t test_channel = 0;
-
-uint32_t test_channels_buff[16];
-
 typedef enum 
 {
     NVDA_CONNECTED,
@@ -44,12 +39,19 @@ typedef struct
     uint8_t data_in[3];
     uint8_t data_out[8];
     uint8_t nvda_buffer[BRAILLE_NVDA_MAX_BUFFER];
-    uint8_t nvda_braille_data_buffer[CELL_NUMBERS];
+    volatile uint8_t nvda_braille_data_buffer[CELL_NUMBERS];
+    uint8_t celds_state[CELL_NUMBERS];
     uint16_t nvda_data_in_counter;
     braille_driver_stm_t state;
     
 }braille_dev_t;
 
+
+enum{
+
+    VIRTUAL_CELL_PRESSED,
+    VIRTUAL_CELL_UNPRESSED
+};
 
 static braille_dev_t braille_dev;
 
@@ -126,6 +128,36 @@ static void braille_uart_handler(void){
 
 }
 
+static void braille_app_task(void *arg){
+
+    (void)arg;
+
+    while(1){
+
+
+        if ( braille_dev.state != NVDA_NOT_CONNECTED ){
+
+            /* Read virtual cells state and store into buffer */
+            cd74hc406x_read_all_channels(braille_dev.celds_state);
+
+            /* Update mechanical cell when some virtual cells is pressed */
+            for ( uint8_t i = 0; i < (uint8_t)16; i++ ){
+
+                if ( braille_dev.celds_state[i] == VIRTUAL_CELL_PRESSED ){
+
+                    HAL_GPIO_WritePin(CD74HC595_ST_CP_GPIO_Port,CD74HC595_ST_CP_Pin,RESET);
+                    IC74hc595_write_byte(braille_dev.nvda_braille_data_buffer[i]);
+                    HAL_GPIO_WritePin(CD74HC595_ST_CP_GPIO_Port,CD74HC595_ST_CP_Pin,SET);
+
+                }
+
+            }
+        }
+
+    }
+    
+}
+
 
 braille_dev_err_t braille_dev_init(void){
 
@@ -158,16 +190,19 @@ braille_dev_err_t braille_dev_init(void){
 
     HAL_GPIO_WritePin(LED_GPIO_Port,LED_Pin, SET);
 
+
+    xTaskCreate(braille_app_task,
+                "braille_app_task",
+                config_BRAILLE_APP_STACK_TASK,
+                NULL,
+                config_BRAILLE_APP_TASK_PRIORITY,
+                NULL);
+
+
     return err;
 
 }
 
-
-
-void braille_dev_task(void){
-
-
-}
 
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
