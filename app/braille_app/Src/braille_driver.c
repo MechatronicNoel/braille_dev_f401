@@ -55,6 +55,23 @@ enum{
 
 static braille_dev_t braille_dev;
 
+
+static uint8_t reorder_bits(uint8_t byte) {
+
+	uint8_t res = 0;
+
+	res |= ((byte & (1 << 0)) << 3);  // Bit 0 → Bit 3
+	res |= ((byte & (1 << 1)) << 1);  // Bit 1 → Bit 2
+	res |= ((byte & (1 << 2)) >> 1);  // Bit 2 → Bit 1
+	res |= ((byte & (1 << 3)) << 4);  // Bit 3 → Bit 7
+	res |= ((byte & (1 << 4)) << 2);  // Bit 4 → Bit 6
+	res |= (byte & (1 << 5));         // Bit 5 → Bit 5 (sin cambio)
+	res |= ((byte & (1 << 6)) >> 6);  // Bit 6 → Bit 0
+	res |= ((byte & (1 << 7)) >> 3);  // Bit 7 → Bit 4
+
+    return res;
+}
+
 /**
  * @brief Braille UART State machine
  * 
@@ -127,13 +144,13 @@ static void braille_uart_handler(void){
 
 
 }
+volatile int display_data = 0;
 
 static void braille_app_task(void *arg){
 
     (void)arg;
 
     while(1){
-
 
         if ( braille_dev.state != NVDA_NOT_CONNECTED ){
 
@@ -145,8 +162,12 @@ static void braille_app_task(void *arg){
 
                 if ( braille_dev.celds_state[i] == VIRTUAL_CELL_PRESSED ){
 
+                	uint8_t temp_val;
+
+                	temp_val = reorder_bits(braille_dev.nvda_braille_data_buffer[i]);
+
                     HAL_GPIO_WritePin(CD74HC595_ST_CP_GPIO_Port,CD74HC595_ST_CP_Pin,RESET);
-                    IC74hc595_write_byte(braille_dev.nvda_braille_data_buffer[i]);
+                    shiftOut(1,temp_val);
                     HAL_GPIO_WritePin(CD74HC595_ST_CP_GPIO_Port,CD74HC595_ST_CP_Pin,SET);
 
                 }
